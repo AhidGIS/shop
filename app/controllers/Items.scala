@@ -18,6 +18,7 @@ class Items extends Controller {
       )
   }
 
+// list of all items
   def list(page: Int) = Action {
     Ok(Json.toJson(shop.list))
   }
