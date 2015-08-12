@@ -6,6 +6,8 @@ import scala.collection.concurrent.TrieMap
 
 case class Item(id: Long, name: String, price: Double)
 
+case class CreateItem(name: String, price: Double)
+
 trait Shop {
   def list(): Seq[Item]
 

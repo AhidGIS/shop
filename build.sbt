@@ -19,4 +19,4 @@ resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
 
-EclipseKeys.preTasks := Seq(compile in Compile)
+//EclipseKeys.preTasks := Seq(compile in Compile)

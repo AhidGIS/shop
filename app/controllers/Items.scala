@@ -1,7 +1,8 @@
 package controllers
 
-import models.Item
-import play.api.libs.json.{Json, Writes}
+import models.{CreateItem, Item}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 import play.api.mvc.{Action, Controller}
 
 class Items extends Controller {
@@ -18,13 +19,24 @@ class Items extends Controller {
       )
   }
 
+  implicit val readsCreateItem: Reads[CreateItem] = (
+    ((__ \ "name").read[String]) and ((__ \ "price").read[Double])
+    )(CreateItem.apply _)
+
 // list of all items
   def list(page: Int) = Action {
     Ok(Json.toJson(shop.list))
   }
 
-  val create = Action {
-    NotImplemented
+  val create = Action(parse.json) { implicit request =>
+    request.body.validate[CreateItem] match {
+      case JsSuccess(createItem, _) =>
+        shop.create(createItem.name, createItem.price) match {
+          case Some(item) => Ok(Json.toJson(item))
+          case None => InternalServerError
+        }
+      case JsError(errors) => BadRequest
+    }
   }
 
   def details(id: Long) = Action {
